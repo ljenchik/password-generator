@@ -1,5 +1,3 @@
-//const { isBooleanObject } = require("util/types");
-
 // Array of special characters to be included in password
 let specialCharactersArray = [
   '@',
@@ -158,8 +156,6 @@ function getRandomString(n, arr) {
   return randomString;
 }
 
-
-
 // Function to generate password with the password length which exactly equals to the sum of all user inputs
 function generatePasswordWithGivenLength (passwordCriteria) {
   let password = "";
@@ -168,8 +164,6 @@ function generatePasswordWithGivenLength (passwordCriteria) {
   } 
   return password;
 }
-
-console.log(generatePasswordWithGivenLength(getPasswordOptions()["Password criteria"]));
 
 // Function to shupple a string
 String.prototype.shuffle = function () {
@@ -185,14 +179,14 @@ String.prototype.shuffle = function () {
   return a.join("");
 }
 
-// Function to generate password with user input
+// Function to generate password with user inputs
 function generatePassword(allCriteria) {
   let password = generatePasswordWithGivenLength(allCriteria["Password criteria"])
   if (allCriteria["Length of password"] > allCriteria["Sum of all prompts"]) {
     let difference = allCriteria["Length of password"] - allCriteria["Sum of all prompts"];
     password += getRandomString(difference, allCharacters)
   }
-  console.log(password.shuffle());
+  console.log("Shuffled password ", password.shuffle());
   return password.shuffle();
 }
 
@@ -206,6 +200,9 @@ function writePassword(allCriteria) {
   var passwordText = document.querySelector('#password');
   passwordText.value = password;
 }
+
+allCriteria = getPasswordOptions();
+writePassword(allCriteria );
 
 // Add event listener to generate button
 generateBtn.addEventListener('click', writePassword);
