@@ -93,54 +93,87 @@ let allCharacters = specialCharactersArray.concat(numericCharactersArray).concat
 
 // Function to prompt user for password options
 function getPasswordOptions() {
-  let criteria = {};
-  let correctCriteria = true;
+  let passwordCriteria = {};
   let lengthOfPassword;
   let sum;
   let allCriteria = {};
-
-  while(correctCriteria) {
+  let nextPrompt = false;
 
     // Prompts for password criteria
-    lengthOfPassword = parseInt(prompt("Enter the length of your password, any number beween 10 and 64: "));
-    
-    let lowerCaseAnswer = prompt("Enter a minimum number of lower case letters: ");
-    criteria.lowerCase = [parseInt(lowerCaseAnswer)];
-    criteria.lowerCase.push(lowerCasedCharactersArray);
-
-    let upperCaseAnswer = prompt("Enter a minimum number of upper case letters: ");
-    criteria.upperCase = [parseInt(upperCaseAnswer)];
-    criteria.upperCase.push(upperCasedCharactersArray);
-
-    let numbersAnswer = prompt("Enter a minimum number of numbers: ");  
-    criteria.numbers = [parseInt(numbersAnswer)];
-    criteria.numbers.push(numericCharactersArray);
-
-    let specialCharactersAnswer = prompt("Enter a minimum number of special characters: ");
-    criteria.specialCharacters = [parseInt(specialCharactersAnswer)];
-    criteria.specialCharacters.push(specialCharactersArray);
-    
-    // Sum of all user inputs to compare with the length of password
-    sum = criteria.lowerCase[0] + criteria.upperCase[0] + criteria.numbers[0] + criteria.specialCharacters[0];
-
-    if (sum > lengthOfPassword) {
-      let answer = confirm("According to your criteria, the length of password must be " + sum + ". Are you happy with this length?");
-      if (answer === true) {
-        criteria.lengthOfPassword = sum;
-        correctCriteria = false;
+    while (!nextPrompt) {
+      let passwordPromptLength = parseInt(prompt("Enter the length of your password, any number between 10 and 64: "));
+      if (passwordPromptLength && (typeof passwordPromptLength === "number") && passwordPromptLength >= 10 && passwordPromptLength <= 64) {
+        lengthOfPassword = passwordPromptLength;
+        nextPrompt = true;
       }
       else {
-       alert('Enter another criteria for your password')
+        alert("Enter the length of your password, any number between 10 and 64: ");
       }
     }
-    else {
-      correctCriteria = false;
-    }
+
+
+
+    
+    let lowerCaseAnswer = prompt("Enter a minimum number of lower case letters: ");
+    passwordCriteria.lowerCase = [parseInt(lowerCaseAnswer)];
+    passwordCriteria.lowerCase.push(lowerCasedCharactersArray);
+
+    let upperCaseAnswer = prompt("Enter a minimum number of upper case letters: ");
+    passwordCriteria.upperCase = [parseInt(upperCaseAnswer)];
+    passwordCriteria.upperCase.push(upperCasedCharactersArray);
+
+    let numbersAnswer = prompt("Enter a minimum number of numbers: ");  
+    passwordCriteria.numbers = [parseInt(numbersAnswer)];
+    passwordCriteria.numbers.push(numericCharactersArray);
+
+    let specialCharactersAnswer = prompt("Enter a minimum number of special characters: ");
+    passwordCriteria.specialCharacters = [parseInt(specialCharactersAnswer)];
+    passwordCriteria.specialCharacters.push(specialCharactersArray);
+    
+    // Sum of all user inputs to compare with the length of password
+    sum = passwordCriteria.lowerCase[0] + passwordCriteria.upperCase[0] + passwordCriteria.numbers[0] + passwordCriteria.specialCharacters[0];
+    
+    allCriteria =  {passwordLength: lengthOfPassword, sum: sum, options : passwordCriteria};
+    return allCriteria;
   }
-  allCriteria =  {"Length of password": lengthOfPassword, "Sum of all prompts": sum, "Password criteria" : criteria};
-  console.log("All criteria object: ", allCriteria);
-  return allCriteria;
-}
+
+console.log(getPasswordOptions());
+
+// Function for verification of password options
+// function verifyPasswordOptions(allCriteria) {
+//   if (allCriteria.passwordLength < 10 || allCriteria.passwordLength > 64) {
+//     alert("Password length must be between 10 and 64");
+//   }
+//   else if (allCriteria.sum > 64) {
+//     alert("Password length must be between 10 and 64");
+//   }
+//   else if (allCriteria.options.lowerCase[0] < 1 )
+
+
+
+
+// };
+
+//     if (sum > lengthOfPassword) {
+//       let answer = confirm("According to your criteria, the length of password must be " + sum + ". Are you happy with this length?");
+//       if (answer === true) {
+//         criteria.lengthOfPassword = sum;
+//         correctOptions = false;
+//       }
+//       else {
+//        alert('Enter another criteria for your password')
+//       }
+//     }
+//     else {
+//       correctOptions = false;
+//     }
+//   }
+
+// }
+
+
+
+
 
 // Function for getting a random element from an array
 function getRandom(arr) {
