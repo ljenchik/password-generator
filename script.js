@@ -105,27 +105,22 @@ function getPasswordOptions() {
 
     // Prompts for password criteria
     lengthOfPassword = parseInt(prompt("Enter the length of your password, any number beween 10 and 64: "));
-    //criteria.lengthOfPassword = parseInt(lengthOfPassword);
     
     let lowerCaseAnswer = prompt("Enter a minimum number of lower case letters: ");
     criteria.lowerCase = [parseInt(lowerCaseAnswer)];
     criteria.lowerCase.push(lowerCasedCharactersArray);
-    console.log(criteria.lowerCase);
 
     let upperCaseAnswer = prompt("Enter a minimum number of upper case letters: ");
     criteria.upperCase = [parseInt(upperCaseAnswer)];
     criteria.upperCase.push(upperCasedCharactersArray);
-    console.log(criteria.upperCase);
 
     let numbersAnswer = prompt("Enter a minimum number of numbers: ");  
     criteria.numbers = [parseInt(numbersAnswer)];
     criteria.numbers.push(numericCharactersArray);
-    console.log(criteria.numbers);
 
     let specialCharactersAnswer = prompt("Enter a minimum number of special characters: ");
     criteria.specialCharacters = [parseInt(specialCharactersAnswer)];
     criteria.specialCharacters.push(specialCharactersArray);
-    console.log(criteria.specialCharacters);
     
     // Sum of all user inputs to compare with the length of password
     sum = criteria.lowerCase[0] + criteria.upperCase[0] + criteria.numbers[0] + criteria.specialCharacters[0];
@@ -145,17 +140,16 @@ function getPasswordOptions() {
     }
   }
   allCriteria =  {"Length of password": lengthOfPassword, "Sum of all prompts": sum, "Password criteria" : criteria};
-  console.log(allCriteria);
+  console.log("All criteria object: ", allCriteria);
   return allCriteria;
 }
-
-console.log(getPasswordOptions());
 
 // Function for getting a random element from an array
 function getRandom(arr) {
   return arr[Math.floor(Math.random()*arr.length)];
 }
 
+// Function for getting a random string with a given length n from an array
 function getRandomString(n, arr) {
   let randomString = "";
   for (let i = 0; i < n; i++) {
@@ -164,14 +158,20 @@ function getRandomString(n, arr) {
   return randomString;
 }
 
+
+
 // Function to generate password with the password length which exactly equals to the sum of all user inputs
-function generatePasswordWithGivenLength (criteria) {
+function generatePasswordWithGivenLength (passwordCriteria) {
   let password = "";
-  for (const property in criteria) {
-    password += getRandomString(property[0], property[1])
+  for (const property in passwordCriteria) {
+    password += getRandomString(passwordCriteria[property][0], passwordCriteria[property][1])
   } 
+  return password;
 }
 
+console.log(generatePasswordWithGivenLength(getPasswordOptions()["Password criteria"]));
+
+// Function to shupple a string
 String.prototype.shuffle = function () {
   var a = this.split(""),
       n = a.length;
@@ -192,7 +192,7 @@ function generatePassword(allCriteria) {
     let difference = allCriteria["Length of password"] - allCriteria["Sum of all prompts"];
     password += getRandomString(difference, allCharacters)
   }
-  // Shuffle password
+  console.log(password.shuffle());
   return password.shuffle();
 }
 
@@ -200,8 +200,9 @@ function generatePassword(allCriteria) {
 var generateBtn = document.querySelector('#generate');
 
 // Write password to the #password input
-function writePassword() {
-  var password = generatePassword();
+function writePassword(allCriteria) {
+  var password = generatePassword(allCriteria);
+  console.log(password);
   var passwordText = document.querySelector('#password');
   passwordText.value = password;
 }
