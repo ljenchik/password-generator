@@ -89,14 +89,13 @@ let upperCasedCharactersArray = [
 ];
 
 // Array of all characters
-let allCharacters = specialCharactersArray.concat(numericCharactersArray).concat(lowerCasedCharactersArray).concat(upperCasedCharactersArray)
+let allCharacters = specialCharactersArray.concat(numericCharactersArray).concat(lowerCasedCharactersArray).concat(upperCasedCharactersArray);
 
-// Function to prompt user for password options
+
+// Function to prompt user for password options and to verfy if user's prompt is a number
 function getPasswordOptions() {
-  let passwordCriteria = {};
+  let passwordCriteria = [];
   let lengthOfPassword;
-  let sum;
-  let allCriteria = {};
   let nextPrompt = false;
 
     // Prompts for password criteria
@@ -106,74 +105,27 @@ function getPasswordOptions() {
         lengthOfPassword = passwordPromptLength;
         nextPrompt = true;
       }
-      else {
-        alert("Enter the length of your password, any number between 10 and 64: ");
-      }
     }
 
-
-
+    passwordCriteria.push({passwordLength: lengthOfPassword})
     
-    let lowerCaseAnswer = prompt("Enter a minimum number of lower case letters: ");
-    passwordCriteria.lowerCase = [parseInt(lowerCaseAnswer)];
-    passwordCriteria.lowerCase.push(lowerCasedCharactersArray);
-
-    let upperCaseAnswer = prompt("Enter a minimum number of upper case letters: ");
-    passwordCriteria.upperCase = [parseInt(upperCaseAnswer)];
-    passwordCriteria.upperCase.push(upperCasedCharactersArray);
-
-    let numbersAnswer = prompt("Enter a minimum number of numbers: ");  
-    passwordCriteria.numbers = [parseInt(numbersAnswer)];
-    passwordCriteria.numbers.push(numericCharactersArray);
-
-    let specialCharactersAnswer = prompt("Enter a minimum number of special characters: ");
-    passwordCriteria.specialCharacters = [parseInt(specialCharactersAnswer)];
-    passwordCriteria.specialCharacters.push(specialCharactersArray);
+    let lowerCaseAnswer = confirm("Do you want to include lower case letters in to your password?");
+    passwordCriteria.push({lowerCaseLetters: lowerCaseAnswer});
     
-    // Sum of all user inputs to compare with the length of password
-    sum = passwordCriteria.lowerCase[0] + passwordCriteria.upperCase[0] + passwordCriteria.numbers[0] + passwordCriteria.specialCharacters[0];
-    
-    allCriteria =  {passwordLength: lengthOfPassword, sum: sum, options : passwordCriteria};
-    return allCriteria;
+
+    let upperCaseAnswer = confirm("Do you want to include upper case letters in to your password?");
+    passwordCriteria.push({upperCaseLetters: upperCaseAnswer});
+
+    let numbersAnswer = confirm("Do you want to include numbers in to your password?");
+    passwordCriteria.push({numbers: numbersAnswer});
+
+    let specialCharactersAnswer = confirm("Do you want to include special characters in to your password?");
+    passwordCriteria.push({numbers: specialCharactersAnswer});
+
+    return passwordCriteria;
   }
 
 console.log(getPasswordOptions());
-
-// Function for verification of password options
-// function verifyPasswordOptions(allCriteria) {
-//   if (allCriteria.passwordLength < 10 || allCriteria.passwordLength > 64) {
-//     alert("Password length must be between 10 and 64");
-//   }
-//   else if (allCriteria.sum > 64) {
-//     alert("Password length must be between 10 and 64");
-//   }
-//   else if (allCriteria.options.lowerCase[0] < 1 )
-
-
-
-
-// };
-
-//     if (sum > lengthOfPassword) {
-//       let answer = confirm("According to your criteria, the length of password must be " + sum + ". Are you happy with this length?");
-//       if (answer === true) {
-//         criteria.lengthOfPassword = sum;
-//         correctOptions = false;
-//       }
-//       else {
-//        alert('Enter another criteria for your password')
-//       }
-//     }
-//     else {
-//       correctOptions = false;
-//     }
-//   }
-
-// }
-
-
-
-
 
 // Function for getting a random element from an array
 function getRandom(arr) {
@@ -234,8 +186,8 @@ function writePassword(allCriteria) {
   passwordText.value = password;
 }
 
-allCriteria = getPasswordOptions();
-writePassword(allCriteria );
+//allCriteria = getPasswordOptions();
+//writePassword(allCriteria );
 
 // Add event listener to generate button
-generateBtn.addEventListener('click', writePassword);
+//generateBtn.addEventListener('click', writePassword);
