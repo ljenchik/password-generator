@@ -1,7 +1,7 @@
-const { isBooleanObject } = require("util/types");
+//const { isBooleanObject } = require("util/types");
 
 // Array of special characters to be included in password
-let specialCharacters = [
+let specialCharactersArray = [
   '@',
   '%',
   '+',
@@ -28,10 +28,10 @@ let specialCharacters = [
 ];
 
 // Array of numeric characters to be included in password
-let numericCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+let numericCharactersArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 // Array of lowercase characters to be included in password
-let lowerCasedCharacters = [
+let lowerCasedCharactersArray = [
   'a',
   'b',
   'c',
@@ -61,7 +61,7 @@ let lowerCasedCharacters = [
 ];
 
 // Array of uppercase characters to be included in password
-let upperCasedCharacters = [
+let upperCasedCharactersArray = [
   'A',
   'B',
   'C',
@@ -91,7 +91,7 @@ let upperCasedCharacters = [
 ];
 
 // Array of all characters
-let allCharacters = specialCharacters.concat(numericCharacters).concat(lowerCasedCharacters).concat(upperCasedCharacters)
+let allCharacters = specialCharactersArray.concat(numericCharactersArray).concat(lowerCasedCharactersArray).concat(upperCasedCharactersArray)
 
 // Function to prompt user for password options
 function getPasswordOptions() {
@@ -102,25 +102,33 @@ function getPasswordOptions() {
   let allCriteria = {};
 
   while(correctCriteria) {
+
     // Prompts for password criteria
     lengthOfPassword = parseInt(prompt("Enter the length of your password, any number beween 10 and 64: "));
     //criteria.lengthOfPassword = parseInt(lengthOfPassword);
     
-    let lowerCase = prompt("Enter a minimum number of lower case letters: ");
-    criteria.lowerCase = [parseInt(lowerCase)];
-    criteria.lowerCase.push(lowerCasedCharacters);
-    let upperCase = prompt("Enter a minimum number of upper case letters: ");
-    criteria.upperCase = [parseInt(upperCase)];
-    criteria.upperCase.push(upperCasedCharacters);
-    let numbers = prompt("Enter a minimum number of numbers: ");  
-    criteria.numbers = [parseInt(numbers)];
-    criteria.lowerCase.push(numericCharacters);
-    let specialCharacters = prompt("Enter a minimum number of special charscters: ");
-    criteria.specialCharacters = [parseInt(specialCharacters)];
-    criteria.lowerCase.push(specialCharacters);
+    let lowerCaseAnswer = prompt("Enter a minimum number of lower case letters: ");
+    criteria.lowerCase = [parseInt(lowerCaseAnswer)];
+    criteria.lowerCase.push(lowerCasedCharactersArray);
+    console.log(criteria.lowerCase);
+
+    let upperCaseAnswer = prompt("Enter a minimum number of upper case letters: ");
+    criteria.upperCase = [parseInt(upperCaseAnswer)];
+    criteria.upperCase.push(upperCasedCharactersArray);
+    console.log(criteria.upperCase);
+
+    let numbersAnswer = prompt("Enter a minimum number of numbers: ");  
+    criteria.numbers = [parseInt(numbersAnswer)];
+    criteria.numbers.push(numericCharactersArray);
+    console.log(criteria.numbers);
+
+    let specialCharactersAnswer = prompt("Enter a minimum number of special characters: ");
+    criteria.specialCharacters = [parseInt(specialCharactersAnswer)];
+    criteria.specialCharacters.push(specialCharactersArray);
+    console.log(criteria.specialCharacters);
     
     // Sum of all user inputs to compare with the length of password
-    sum = lowerCase + upperCase + numbers + specialCharacters;
+    sum = criteria.lowerCase[0] + criteria.upperCase[0] + criteria.numbers[0] + criteria.specialCharacters[0];
 
     if (sum > lengthOfPassword) {
       let answer = confirm("According to your criteria, the length of password must be " + sum + ". Are you happy with this length?");
