@@ -171,25 +171,28 @@ function shuffle(s) {
 
 // Function to generate password with user inputs
 function generatePassword(passwordLength, passwordCriteria) {
-  console.log(passwordCriteria);
   let password = "";
   let passwordCharactersToChoose = [];
 
   for (const element of passwordCriteria) {
     if (Object.values(element)[0][0]) {
       password += getRandom(Object.values(element)[0][1]);
-      console.log(password);
       passwordCharactersToChoose.push(...Object.values(element)[0][1]);
-      console.log(passwordCharactersToChoose);
     }
   }
 
   let remainder = passwordLength - password.length;
-  console.log(remainder);
-  for (let i = 0; i < remainder; i++) {
+  if (remainder < passwordLength) {
+    for (let i = 0; i < remainder; i++) {
       password += getRandom(passwordCharactersToChoose);
+    }
+  } 
+  // Returns password which contains random characters from all arrays
+  else {
+    for (let i = 0; i < remainder; i++) {
+      password += getRandom(allCharacters);
+    }
   }
-  console.log("Shuffled password ", shuffle(password));
   return shuffle(password);
 }
 
