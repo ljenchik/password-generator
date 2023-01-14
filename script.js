@@ -96,26 +96,61 @@ let allCharacters = specialCharactersArray
 
 // Function to prompt user for password options and to verfy if user's password length prompt is a number
 function getPasswordOptions() {
+  let output = [];
   let passwordCriteria = [];
-  let nextPrompt = false;
 
   // Prompts for password criteria
+  let nextPrompt = false;
+
+  // Regex expression for an integer
+  let regexInteger = /(?<=\s|^)\d+(?=\s|$)/g;
+
+  // Regex expression for a decimal
+  let regexDecimal = /^\d*\.?\d*$/g;
+
+  let passwordPromptLength;
+
   while (!nextPrompt) {
-    let passwordPromptLength = parseInt(
+    passwordPromptLength = (
       prompt(
         "Enter the length of your password, any number between 10 and 64: "
       )
     );
     if (
-      passwordPromptLength &&
-      typeof passwordPromptLength === "number" &&
-      passwordPromptLength >= 10 &&
-      passwordPromptLength <= 64
+      regexInteger.test(passwordPromptLength) &&
+      parseInt(passwordPromptLength) >= 10 &&
+      parseInt(passwordPromptLength) <= 64
     ) {
       passwordLength = passwordPromptLength;
       nextPrompt = true;
     }
+    else {
+      if (
+        regexInteger.test(passwordPromptLength) &&
+        parseInt(passwordPromptLength) < 10 
+      ) {
+        alert(`${passwordPromptLength} is less than 10. Enter an integer between 10 and 64`);
+      }
+      else if (
+        regexInteger.test(passwordPromptLength) &&
+        parseInt(passwordPromptLength) > 64  
+      ) {
+        alert(`${passwordPromptLength} is more than 64. Enter an integer between 10 and 64`);
+      }
+      else if (passwordPromptLength && regexDecimal.test(passwordPromptLength)) {
+        alert(`${passwordPromptLength} is a decimal. Enter an integer between 10 and 64`);
+      }
+      else if (!passwordPromptLength.trim()) {
+        alert("Your input is empty. Enter an integer between 10 and 64");
+      }
+      else {
+        alert(`Your input \"${passwordPromptLength}\" is not an integer. Enter an integer between 10 and 64`);
+      }
+    }
   }
+
+  // Add password length to the output array
+  output.push(passwordLength);
 
   let lowerCaseAnswer = confirm(
     "Do you want to include lower case letters in to your password?"
@@ -143,7 +178,9 @@ function getPasswordOptions() {
     specialCharacters: [specialCharactersAnswer, specialCharactersArray],
   });
 
-  return [passwordLength, passwordCriteria];
+  output.push(passwordCriteria);
+
+  return output;
 }
 
 // Function for getting a random element from an array
@@ -151,6 +188,7 @@ function getRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+// Function for getting a random integer from 0 to n - 1 inclusive
 function getRandomInt(n) {
   return Math.floor(Math.random() * n);
 }
@@ -170,19 +208,19 @@ function shuffle(s) {
 }
 
 // Function to generate password with user inputs
-function generatePassword(passwordLength, passwordCriteria) {
+function generatePassword(length, options) {
   let password = "";
   let passwordCharactersToChoose = [];
 
-  for (const element of passwordCriteria) {
+  for (const element of options) {
     if (Object.values(element)[0][0]) {
       password += getRandom(Object.values(element)[0][1]);
       passwordCharactersToChoose.push(...Object.values(element)[0][1]);
     }
   }
 
-  let remainder = passwordLength - password.length;
-  if (remainder < passwordLength) {
+  let remainder = length - password.length;
+  if (remainder < length) {
     for (let i = 0; i < remainder; i++) {
       password += getRandom(passwordCharactersToChoose);
     }
@@ -200,8 +238,8 @@ function generatePassword(passwordLength, passwordCriteria) {
 var generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
-function writePassword(passwordLength, passwordCriteria) {
-  var password = generatePassword(passwordLength, passwordCriteria);
+function writePassword(length, options) {
+  var password = generatePassword(length, options);
   var passwordText = document.querySelector("#password");
   passwordText.value = password;
 }
