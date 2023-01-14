@@ -180,6 +180,7 @@ function getPasswordOptions() {
 
   output.push(passwordCriteria);
 
+  // The output is an array with 2 elements, the first is a password length (integer), the second is array of objects
   return output;
 }
 
