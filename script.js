@@ -155,7 +155,7 @@ function getPasswordOptions() {
   passwordCriteria.push(passwordLength);
 
   let lowerCaseAnswer = confirm(
-    `You password will consists of ${passwordLength} characters. Do you want to include lower case letters in to your password?`
+    `You password will have ${passwordLength} characters. Do you want to include lower case letters in your password?`
   );
   if (lowerCaseAnswer) {
     passwordCriteria.push(lowerCasedCharactersArray);
@@ -163,7 +163,7 @@ function getPasswordOptions() {
   }
 
   let upperCaseAnswer = confirm(
-    "Do you want to include upper case letters in to your password?"
+    "Do you want to include upper case letters in your password?"
   );
   if (upperCaseAnswer) {
     passwordCriteria[1] = passwordCriteria[1].concat(upperCasedCharactersArray);
@@ -173,7 +173,7 @@ function getPasswordOptions() {
   }
 
   let numericAnswer = confirm(
-    "Do you want to include numbers in to your password?"
+    "Do you want to include numbers in your password?"
   );
   if (numericAnswer) {
     passwordCriteria[1] = passwordCriteria[1].concat(numericCharactersArray);
@@ -183,7 +183,7 @@ function getPasswordOptions() {
   }
 
   let specialCharactersAnswer = confirm(
-    "Do you want to include special characters in to your password?"
+    "Do you want to include special characters in your password?"
   );
   if (specialCharactersAnswer) {
     passwordCriteria[1] = passwordCriteria[1].concat(specialCharactersArray);
