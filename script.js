@@ -194,6 +194,9 @@ function getPasswordOptions() {
 
   // The passwordCriteria is an array with 3 elements, the first is a password length (integer),
   //the second is an array of possible characters, the third one is the generated beginning of the password
+  if (!passwordCriteria[2]) {
+    passwordCriteria = [passwordLength, allCharacters, ""]
+  }
   return passwordCriteria;
 }
 
