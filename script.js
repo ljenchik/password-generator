@@ -101,10 +101,10 @@ function getPasswordOptions() {
   let nextPrompt = false;
 
   // Regex expression for an integer
-  let regexInteger = /^[-+]?\d*$/g;
+  let regexInteger = /^[-+]?\d*$/;
 
   // Regex expression for a decimal
-  let regexDecimal = /^\d*\.?\d*$/g;
+  let regexDecimal = /^\d*\.?\d*$/;
 
   let passwordPromptLength;
 
@@ -235,7 +235,7 @@ function generatePassword(passwordCriteria) {
     }
   }
 
-  return shuffle(password);
+  return shuffle(passwordCriteria[2] + password);
 }
 
 // Get references to the #generate element
