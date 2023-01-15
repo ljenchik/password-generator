@@ -88,6 +88,11 @@ let upperCasedCharactersArray = [
   "Z",
 ];
 
+let allCharacters = lowerCasedCharactersArray
+  .concat(upperCasedCharactersArray)
+  .concat(numericCharactersArray)
+  .concat(specialCharactersArray);
+
 // Function to prompt user for password options and to verfy if user's password length prompt is a number
 function getPasswordOptions() {
   let passwordCriteria = [];
@@ -96,7 +101,7 @@ function getPasswordOptions() {
   let nextPrompt = false;
 
   // Regex expression for an integer
-  let regexInteger = 	/^[-+]?\d*$/g;
+  let regexInteger = /^[-+]?\d*$/g;
 
   // Regex expression for a decimal
   let regexDecimal = /^\d*\.?\d*$/g;
@@ -104,7 +109,9 @@ function getPasswordOptions() {
   let passwordPromptLength;
 
   while (!nextPrompt) {
-    passwordPromptLength = prompt("Enter the length of your password, any number between 10 and 64: ").trim();
+    passwordPromptLength = prompt(
+      "Enter the length of your password, any number between 10 and 64: "
+    ).trim();
     if (
       regexInteger.test(passwordPromptLength) &&
       parseInt(passwordPromptLength) >= 10 &&
@@ -112,28 +119,34 @@ function getPasswordOptions() {
     ) {
       passwordLength = passwordPromptLength;
       nextPrompt = true;
-    }
-    else {
+    } else {
       if (
         regexInteger.test(passwordPromptLength) &&
-        parseInt(passwordPromptLength) < 10 
+        parseInt(passwordPromptLength) < 10
       ) {
-        alert(`${passwordPromptLength} is less than 10. Enter an integer between 10 and 64`);
-      }
-      else if (
+        alert(
+          `${passwordPromptLength} is less than 10. Enter an integer between 10 and 64`
+        );
+      } else if (
         regexInteger.test(passwordPromptLength) &&
-        parseInt(passwordPromptLength) > 64  
+        parseInt(passwordPromptLength) > 64
       ) {
-        alert(`${passwordPromptLength} is more than 64. Enter an integer between 10 and 64`);
-      }
-      else if (passwordPromptLength && regexDecimal.test(passwordPromptLength)) {
-        alert(`${passwordPromptLength} is a decimal. Enter an integer between 10 and 64`);
-      }
-      else if (!passwordPromptLength.trim()) {
+        alert(
+          `${passwordPromptLength} is more than 64. Enter an integer between 10 and 64`
+        );
+      } else if (
+        passwordPromptLength &&
+        regexDecimal.test(passwordPromptLength)
+      ) {
+        alert(
+          `${passwordPromptLength} is a decimal. Enter an integer between 10 and 64`
+        );
+      } else if (!passwordPromptLength.trim()) {
         alert(`Your input is empty. Enter an integer between 10 and 64`);
-      }
-      else {
-        alert(`Your input \"${passwordPromptLength}\" is not an integer. Enter an integer between 10 and 64`);
+      } else {
+        alert(
+          `Your input \"${passwordPromptLength}\" is not an integer. Enter an integer between 10 and 64`
+        );
       }
     }
   }
@@ -142,7 +155,7 @@ function getPasswordOptions() {
   passwordCriteria.push(passwordLength);
 
   let lowerCaseAnswer = confirm(
-    `You password will consists of ${passwordLength}. Do you want to include lower case letters in to your password?`
+    `You password will consists of ${passwordLength} characters. Do you want to include lower case letters in to your password?`
   );
   if (lowerCaseAnswer) {
     passwordCriteria.push(lowerCasedCharactersArray);
@@ -154,7 +167,9 @@ function getPasswordOptions() {
   );
   if (upperCaseAnswer) {
     passwordCriteria[1] = passwordCriteria[1].concat(upperCasedCharactersArray);
-    passwordCriteria[2] = passwordCriteria[2].concat(getRandom(upperCasedCharactersArray));
+    passwordCriteria[2] = passwordCriteria[2].concat(
+      getRandom(upperCasedCharactersArray)
+    );
   }
 
   let numericAnswer = confirm(
@@ -162,18 +177,22 @@ function getPasswordOptions() {
   );
   if (numericAnswer) {
     passwordCriteria[1] = passwordCriteria[1].concat(numericCharactersArray);
-    passwordCriteria[2] = passwordCriteria[2].concat(getRandom(numericCharactersArray));
+    passwordCriteria[2] = passwordCriteria[2].concat(
+      getRandom(numericCharactersArray)
+    );
   }
 
   let specialCharactersAnswer = confirm(
     "Do you want to include special characters in to your password?"
   );
   if (specialCharactersAnswer) {
-    passwordCriteria[1] = passwordCriteria[1].concat(specialCharactersArray)
-    passwordCriteria[2] = passwordCriteria[2].concat(getRandom(specialCharactersArray));
+    passwordCriteria[1] = passwordCriteria[1].concat(specialCharactersArray);
+    passwordCriteria[2] = passwordCriteria[2].concat(
+      getRandom(specialCharactersArray)
+    );
   }
 
-  // The output is an array with 3 elements, the first is a password length (integer), 
+  // The passwordCriteria is an array with 3 elements, the first is a password length (integer),
   //the second is an array of possible characters, the third one is the generated beginning of the password
   return passwordCriteria;
 }
@@ -206,9 +225,16 @@ function shuffle(s) {
 function generatePassword(passwordCriteria) {
   let password = "";
   let remainder = passwordCriteria[0] - passwordCriteria[2].length;
+  if (remainder < passwordCriteria[0]) {
     for (let i = 0; i < remainder; i++) {
       password += getRandom(passwordCriteria[1]);
-  } 
+    }
+  } else {
+    for (let i = 0; i < remainder; i++) {
+      password += getRandom(allCharacters);
+    }
+  }
+
   return shuffle(password);
 }
 
