@@ -88,22 +88,15 @@ let upperCasedCharactersArray = [
   "Z",
 ];
 
-// Array of all characters
-let allCharacters = specialCharactersArray
-  .concat(numericCharactersArray)
-  .concat(lowerCasedCharactersArray)
-  .concat(upperCasedCharactersArray);
-
 // Function to prompt user for password options and to verfy if user's password length prompt is a number
 function getPasswordOptions() {
-  let output = [];
   let passwordCriteria = [];
 
   // Prompts for password criteria
   let nextPrompt = false;
 
   // Regex expression for an integer
-  let regexInteger = /(?<=\s|^)\d+(?=\s|$)/g;
+  let regexInteger = 	/^[-+]?\d*$/g;
 
   // Regex expression for a decimal
   let regexDecimal = /^\d*\.?\d*$/g;
@@ -111,11 +104,7 @@ function getPasswordOptions() {
   let passwordPromptLength;
 
   while (!nextPrompt) {
-    passwordPromptLength = (
-      prompt(
-        "Enter the length of your password, any number between 10 and 64: "
-      )
-    );
+    passwordPromptLength = prompt("Enter the length of your password, any number between 10 and 64: ").trim();
     if (
       regexInteger.test(passwordPromptLength) &&
       parseInt(passwordPromptLength) >= 10 &&
@@ -141,7 +130,7 @@ function getPasswordOptions() {
         alert(`${passwordPromptLength} is a decimal. Enter an integer between 10 and 64`);
       }
       else if (!passwordPromptLength.trim()) {
-        alert("Your input is empty. Enter an integer between 10 and 64");
+        alert(`Your input is empty. Enter an integer between 10 and 64`);
       }
       else {
         alert(`Your input \"${passwordPromptLength}\" is not an integer. Enter an integer between 10 and 64`);
@@ -150,38 +139,43 @@ function getPasswordOptions() {
   }
 
   // Add password length to the output array
-  output.push(passwordLength);
+  passwordCriteria.push(passwordLength);
 
   let lowerCaseAnswer = confirm(
-    "Do you want to include lower case letters in to your password?"
+    `You password will consists of ${passwordLength}. Do you want to include lower case letters in to your password?`
   );
-  passwordCriteria.push({
-    lowerCaseLetters: [lowerCaseAnswer, lowerCasedCharactersArray],
-  });
+  if (lowerCaseAnswer) {
+    passwordCriteria.push(lowerCasedCharactersArray);
+    passwordCriteria.push(getRandom(lowerCasedCharactersArray));
+  }
 
   let upperCaseAnswer = confirm(
     "Do you want to include upper case letters in to your password?"
   );
-  passwordCriteria.push({
-    upperCaseLetters: [upperCaseAnswer, upperCasedCharactersArray],
-  });
+  if (upperCaseAnswer) {
+    passwordCriteria[1] = passwordCriteria[1].concat(upperCasedCharactersArray);
+    passwordCriteria[2] = passwordCriteria[2].concat(getRandom(upperCasedCharactersArray));
+  }
 
   let numericAnswer = confirm(
     "Do you want to include numbers in to your password?"
   );
-  passwordCriteria.push({ numbers: [numericAnswer, numericCharactersArray] });
+  if (numericAnswer) {
+    passwordCriteria[1] = passwordCriteria[1].concat(numericCharactersArray);
+    passwordCriteria[2] = passwordCriteria[2].concat(getRandom(numericCharactersArray));
+  }
 
   let specialCharactersAnswer = confirm(
     "Do you want to include special characters in to your password?"
   );
-  passwordCriteria.push({
-    specialCharacters: [specialCharactersAnswer, specialCharactersArray],
-  });
+  if (specialCharactersAnswer) {
+    passwordCriteria[1] = passwordCriteria[1].concat(specialCharactersArray)
+    passwordCriteria[2] = passwordCriteria[2].concat(getRandom(specialCharactersArray));
+  }
 
-  output.push(passwordCriteria);
-
-  // The output is an array with 2 elements, the first is a password length (integer), the second is array of objects
-  return output;
+  // The output is an array with 3 elements, the first is a password length (integer), 
+  //the second is an array of possible characters, the third one is the generated beginning of the password
+  return passwordCriteria;
 }
 
 // Function for getting a random element from an array
@@ -209,29 +203,12 @@ function shuffle(s) {
 }
 
 // Function to generate password with user inputs
-function generatePassword(length, options) {
+function generatePassword(passwordCriteria) {
   let password = "";
-  let passwordCharactersToChoose = [];
-
-  for (const element of options) {
-    if (Object.values(element)[0][0]) {
-      password += getRandom(Object.values(element)[0][1]);
-      passwordCharactersToChoose.push(...Object.values(element)[0][1]);
-    }
-  }
-
-  let remainder = length - password.length;
-  if (remainder < length) {
+  let remainder = passwordCriteria[0] - passwordCriteria[2].length;
     for (let i = 0; i < remainder; i++) {
-      password += getRandom(passwordCharactersToChoose);
-    }
+      password += getRandom(passwordCriteria[1]);
   } 
-  // Returns password which contains random characters from all arrays
-  else {
-    for (let i = 0; i < remainder; i++) {
-      password += getRandom(allCharacters);
-    }
-  }
   return shuffle(password);
 }
 
@@ -239,14 +216,14 @@ function generatePassword(length, options) {
 var generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
-function writePassword(length, options) {
-  var password = generatePassword(length, options);
+function writePassword(passwordCriteria) {
+  var password = generatePassword(passwordCriteria);
   var passwordText = document.querySelector("#password");
   passwordText.value = password;
 }
 
 passwordCriteria = getPasswordOptions();
-writePassword(passwordCriteria[0], passwordCriteria[1]);
+writePassword(passwordCriteria);
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
