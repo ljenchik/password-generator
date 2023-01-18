@@ -92,11 +92,10 @@ let allCharacters = lowerCasedCharactersArray
   .concat(upperCasedCharactersArray)
   .concat(numericCharactersArray)
   .concat(specialCharactersArray);
-
+  
+let passwordCriteria = [];
 // Function to prompt user for password options and to verfy if user's password length prompt is a number
 function getPasswordOptions() {
-  let passwordCriteria = [];
-
   // Prompts for password criteria
   let nextPrompt = false;
 
@@ -198,6 +197,7 @@ function getPasswordOptions() {
     passwordCriteria.push(allCharacters);
     passwordCriteria.push("");
   }
+
   console.log(passwordCriteria);
   return passwordCriteria;
 }
@@ -253,7 +253,8 @@ function generatePassword(passwordCriteria) {
 var generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
-function writePassword(passwordCriteria) {
+function writePassword() {
+  console.log(passwordCriteria);
   var password = generatePassword(passwordCriteria);
   var passwordText = document.querySelector("#password");
   passwordText.value = password;
