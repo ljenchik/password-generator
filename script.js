@@ -108,10 +108,13 @@ function getPasswordOptions() {
 
   let passwordPromptLength;
 
+
   while (!nextPrompt) {
     passwordPromptLength = prompt(
       "Enter the length of your password, any number between 10 and 64: "
-    ).trim();
+    );
+    passwordPromptLength = passwordPromptLength ? passwordPromptLength.trim() : "";
+    console.log(passwordPromptLength);
     if (
       regexInteger.test(passwordPromptLength) &&
       parseInt(passwordPromptLength) >= 10 &&
