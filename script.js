@@ -108,13 +108,11 @@ function getPasswordOptions() {
 
   let passwordPromptLength;
 
-
   while (!nextPrompt) {
     passwordPromptLength = prompt(
       "Enter the length of your password, any number between 10 and 64: "
     );
     passwordPromptLength = passwordPromptLength ? passwordPromptLength.trim() : "";
-    console.log(passwordPromptLength);
     if (
       regexInteger.test(passwordPromptLength) &&
       parseInt(passwordPromptLength) >= 10 &&
@@ -153,7 +151,6 @@ function getPasswordOptions() {
       }
     }
   }
-
   // Add password length to the output array
   passwordCriteria.push(passwordLength);
 
@@ -197,9 +194,11 @@ function getPasswordOptions() {
 
   // The passwordCriteria is an array with 3 elements, the first is a password length (integer),
   //the second is an array of possible characters, the third one is the generated beginning of the password
-  if (!passwordCriteria[2]) {
-    passwordCriteria = [passwordLength, allCharacters, ""]
+  if (passwordCriteria.length === 1) {
+    passwordCriteria.push(allCharacters);
+    passwordCriteria.push("");
   }
+  console.log(passwordCriteria);
   return passwordCriteria;
 }
 
@@ -230,7 +229,13 @@ function shuffle(s) {
 // Function to generate password with user inputs
 function generatePassword(passwordCriteria) {
   let password = "";
-  let remainder = passwordCriteria[0] - passwordCriteria[2].length;
+  let remainder;
+  if (passwordCriteria[2] && passwordCriteria[2] !== "" ) {
+    remainder = passwordCriteria[0] - passwordCriteria[2].length;
+  }
+  else {
+    remainder = passwordCriteria[0];
+  }
   if (remainder < passwordCriteria[0]) {
     for (let i = 0; i < remainder; i++) {
       password += getRandom(passwordCriteria[1]);
@@ -240,8 +245,8 @@ function generatePassword(passwordCriteria) {
       password += getRandom(allCharacters);
     }
   }
-
-  return shuffle(passwordCriteria[2] + password);
+  password += passwordCriteria[2];
+  return shuffle(password);
 }
 
 // Get references to the #generate element
